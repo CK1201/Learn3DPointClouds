@@ -31,9 +31,10 @@ def main():
     k = 8
     radius = 1
 
-    root_dir = '/Users/renqian/cloud_lesson/kitti' # 数据集路径
+    root_dir = '..\\3DDataset\\KITTI_object\\data_object_velodyne\\training\\velodyne' # 数据集路径
     cat = os.listdir(root_dir)
     iteration_num = len(cat)
+    iteration_num = 100
 
     print("octree --------------")
     construction_time_sum = 0
@@ -41,23 +42,24 @@ def main():
     radius_time_sum = 0
     brute_time_sum = 0
     for i in range(iteration_num):
+        # print("octree: ", i)
         filename = os.path.join(root_dir, cat[i])
         db_np = read_velodyne_bin(filename)
 
         begin_t = time.time()
-        root = octree.octree_construction(db_np, leaf_size, min_extent)
+    #     root = octree.octree_construction(db_np, leaf_size, min_extent)
         construction_time_sum += time.time() - begin_t
 
         query = db_np[0,:]
 
         begin_t = time.time()
         result_set = KNNResultSet(capacity=k)
-        octree.octree_knn_search(root, db_np, result_set, query)
+    #     octree.octree_knn_search(root, db_np, result_set, query)
         knn_time_sum += time.time() - begin_t
 
         begin_t = time.time()
         result_set = RadiusNNResultSet(radius=radius)
-        octree.octree_radius_search_fast(root, db_np, result_set, query)
+    #     octree.octree_radius_search_fast(root, db_np, result_set, query)
         radius_time_sum += time.time() - begin_t
 
         begin_t = time.time()
@@ -76,6 +78,7 @@ def main():
     radius_time_sum = 0
     brute_time_sum = 0
     for i in range(iteration_num):
+        # print("kdtree: ",i)
         filename = os.path.join(root_dir, cat[i])
         db_np = read_velodyne_bin(filename)
 

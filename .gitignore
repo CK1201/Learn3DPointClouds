@@ -1,5 +1,6 @@
 3DDataset/
 .idea/
 point_clouds/
+__pycache__/
 *.zip
 *.rar
